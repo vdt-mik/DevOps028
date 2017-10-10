@@ -2,6 +2,7 @@ pipeline {
   agent any
   tools {
         maven 'maven'
+        jdk 'jdk8'
     }
   
   environment {
@@ -10,6 +11,13 @@ pipeline {
 
 
   stages {
+    stage('test') {
+      agent any
+
+      steps {
+        sh 'mvn clean test'
+      }
+    }
     stage('build') {
       agent any
 
