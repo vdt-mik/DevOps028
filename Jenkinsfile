@@ -25,5 +25,11 @@ pipeline {
         sh 'mvn package'
       }
     }
+    stage('safe') {
+      agent any
+
+      steps {
+        sh 'pwd'
+      }    
   }
 }
