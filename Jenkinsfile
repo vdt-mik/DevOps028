@@ -38,8 +38,9 @@ pipeline {
       agent any
 
       steps {
-        sh './deploy.sh'
-      }      
+
+        sh 'chmod +x deploy.sh && ./deploy.sh'
+      }      r
     }
     stage('create_rds-instance') {
       agent any
