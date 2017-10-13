@@ -34,5 +34,19 @@ pipeline {
         sh 'aws s3 cp liquibase.tar.gz s3://mik-bucket/'
       }    
     }
+    stage('create_ec2-instance') {
+      agent any
+
+      steps {
+        sh 'echo $NAME_PROJECT'
+      }    
+    }
+    stage('create_rds-instance') {
+      agent any
+
+      steps {
+        sh 'echo $NAME_PROJECT'
+      }    
+    }
   }
 }
