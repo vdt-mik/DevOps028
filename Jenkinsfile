@@ -38,12 +38,8 @@ pipeline {
       agent any
 
       steps {
-        sh 'aws ec2 create-security-group --group-name $SG_NAME --description "Demo Security Group" --output text'
-        sh 'aws ec2 authorize-security-group-ingress --group-name $SG_NAME --protocol icmp --port -1 --cidr 0.0.0.0/0 --output text'
-        sh 'aws ec2 authorize-security-group-ingress --group-name $SG_NAME --protocol tcp --port 22 --cidr 0.0.0.0/0 --output text'
-        sh 'aws ec2 authorize-security-group-ingress --group-name $SG_NAME --protocol tcp --port 80 --cidr 0.0.0.0/0 --output text'
-        sh 'aws ec2 describe-security-groups --filters "Name=group-name,Values=$SG_NAME" --output text'
-      }    
+        sh './deploy.sh'
+        
     }
     stage('create_rds-instance') {
       agent any
