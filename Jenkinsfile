@@ -39,7 +39,7 @@ pipeline {
 
       steps {
         sh './deploy.sh'
-        
+      }      
     }
     stage('create_rds-instance') {
       agent any
