@@ -4,7 +4,7 @@
 #
 aws rds delete-db-instance \
 --db-instance-identifier $(aws ssm get-parameters --names DB_INST_NAME --with-decryption --output text | awk '{print $4}') \
---skip-final-snapshot
+--skip-final-snapshot 
 # Wait deleted
 count=1
 while [[ "$count" != "0" ]]; do
