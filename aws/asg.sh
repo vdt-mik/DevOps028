@@ -21,7 +21,7 @@ done
 echo "LC deleted ===============================>"
 #create LC 
 aws autoscaling create-launch-configuration --launch-configuration-name $(aws ssm get-parameters --names LC_NAME --with-decryption --output text | awk '{print $4}') \
---key-name ec2-key --image-id ami-c7ee5ca8 --security-groups samsara-sg --instance-type t2.micro --user-data s3://mik-bucket/user-data.sh --instance-monitoring Enabled=true
+--key-name ec2-key --image-id ami-c7ee5ca8 --security-groups samsara-sg --instance-type t2.micro --user-data s3://mik-bucket/user-data.sh --instance-monitoring Enabled=true --iam-instance-profile EC2
 sleep 5
 echo "LC created ===============================>"
 #delete LB

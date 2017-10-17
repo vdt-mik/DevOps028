@@ -1,31 +1,16 @@
 #!/bin/bash
 sudo yum update -y && sudo yum install nano vim git -y
-sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
 #======================================
 # Set variables
 #
 function get_pr {
     aws ssm get-parameters --names $1 --with-decryption --output text | awk '{print $4}'
 }
-
-export AWS_DEFAULT_REGION=`get_pr "region"`
-export AWS_SECRET_ACCESS_KEY=`get_pr "access_key"`
-export AWS_ACCESS_KEY_ID=`get_pr "key_id"`
-#======================================
-# Create AWS config file
-#
-mkdir -p ~/.aws
-cat <<EOF> ~/.aws/config
-[default]
-aws_access_key_id=$AWS_ACCESS_KEY_ID
-aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
-region=$AWS_DEFAULT_REGION
-output=json
-EOF
 #======================================
 # Install JDK
 #
-cd /tmp && aws s3 cp s3://mik-repo/jdk-8u144-linux-x64.rpm ./ && sudo yum localinstall jdk-8u*-linux-x64.rpm -y
+cd /tmp && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
+"http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm" && sudo yum localinstall jdk-8u*-linux-x64.rpm -y
 #======================================
 # Create user
 #
@@ -39,7 +24,7 @@ cat <<EOF> ~/.aws/config
 [default]
 aws_access_key_id=$AWS_ACCESS_KEY_ID
 aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
-region=$AWS_DEFAULT_REGION
+region=eu-central-1
 output=json
 EOF
 #======================================

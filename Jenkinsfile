@@ -20,6 +20,7 @@ pipeline {
           sh 'tar -czf liquibase.tar.gz liquibase'
           sh 'aws s3 cp target/Samsara-*.jar s3://mik-bucket/'
           sh 'aws s3 cp liquibase.tar.gz s3://mik-bucket/'
+          sh 'aws s3 cp aws/deploy.sh s3://mik-bucket/'
         }
       }
     }
