@@ -23,10 +23,16 @@ pipeline {
         }
       }
     }
-    stage('Deploy') {
+    stage('Deploy RDS') {
       steps {
-        sh 'sh 'chmod +x deploy.sh && ./deploy.sh''
+        sh 'chmod +x aws/rds.sh && ./aws/rds.sh'
       }
+    }
+    stage('Deploy RDS') {
+      steps {
+        sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
+      }
+    }
     }
   }
 }
