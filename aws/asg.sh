@@ -45,3 +45,4 @@ aws autoscaling create-auto-scaling-group --auto-scaling-group-name $(aws ssm ge
 --launch-configuration-name $(aws ssm get-parameters --names LC_NAME --with-decryption --output text | awk '{print $4}') --min-size 1 --max-size 3 --desired-capacity 2 \
 --load-balancer-names $(aws ssm get-parameters --names LB_NAME --with-decryption --output text | awk '{print $4}') --health-check-type ELB --health-check-grace-period 300 --availability-zones eu-central-1b
 echo "ASG created ===============================>"
+#11
