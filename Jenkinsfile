@@ -33,6 +33,5 @@ pipeline {
         sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
       }
     }
-    }
   }
 }
