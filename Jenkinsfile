@@ -4,49 +4,29 @@ pipeline {
         maven 'maven'
         jdk 'jdk8'
     }
-  
-  environment {
-    MAJOR_VERSION = 2
-  }
-
 
   stages {
-    stage('test') {
-      agent any
-
+    stage('Checkout') {
+            steps {git url: 'https://github.com/vdt-mik/DevOps028'}
+        }
+    stage('Test & Build') {
       steps {
         sh 'mvn clean test'
+        sh 'mvn clean package'
+      }
+      post {
+        success {
+          archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true
+          sh 'tar -czf liquibase.tar.gz liquibase'
+          sh 'aws s3 cp target/Samsara-*.jar s3://mik-bucket/'
+          sh 'aws s3 cp liquibase.tar.gz s3://mik-bucket/'
+        }
       }
     }
-    stage('build') {
-      agent any
-
+    stage('Deploy') {
       steps {
-        sh 'mvn package'
+        sh 'sh 'chmod +x deploy.sh && ./deploy.sh''
       }
-    }
-    stage('safe') {
-      agent any
-
-      steps {
-        sh 'tar -czf liquibase.tar.gz liquibase'
-        sh 'aws s3 cp target/Samsara-*.jar s3://mik-bucket/'
-        sh 'aws s3 cp liquibase.tar.gz s3://mik-bucket/'
-      }    
-    }
-    stage('create_ec2-instance') {
-      agent any
-
-      steps {
-        sh 'chmod +x deploy.sh && ./deploy.sh'
-      }
-    }
-    stage('create_rds-instance') {
-      agent any
-
-      steps {
-        sh 'echo $NAME_PROJECT'
-      }    
     }
   }
 }
