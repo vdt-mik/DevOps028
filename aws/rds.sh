@@ -35,4 +35,3 @@ done
 EXISTING_DB_INSTANCE_INFO=`aws rds describe-db-instances --db-instance-identifier $(aws ssm get-parameters --names DB_INST_NAME --with-decryption --output text | awk '{print $4}') --query 'DBInstances[*].[DBInstanceIdentifier,Endpoint.Address,Endpoint.Port]' --output text`
 aws ssm put-parameter --name "DB_HOST" --type "String" --value "$(echo ${EXISTING_DB_INSTANCE_INFO} | awk '{print $2}')" --overwrite
 aws ssm put-parameter --name "DB_PORT" --type "String" --value "$(echo ${EXISTING_DB_INSTANCE_INFO} | awk '{print $3}')" --overwrite
-#11
