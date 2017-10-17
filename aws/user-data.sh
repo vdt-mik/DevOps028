@@ -7,11 +7,6 @@ sudo yum update -y && sudo yum install nano vim git -y
 cd /tmp && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
 "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm" && sudo yum localinstall jdk-8u*-linux-x64.rpm -y
 #======================================
-# Create user
-#
-sudo adduser app
-sudo su app
-#======================================
 # Set variables
 #
 function get_pr {
@@ -19,8 +14,8 @@ function get_pr {
 }
 
 export AWS_DEFAULT_REGION=eu-central-1
-export AWS_SECRET_ACCESS_KEY=`get_pr "access_key"`
-export AWS_ACCESS_KEY_ID=`get_pr "key_id"`
+export AWS_SECRET_ACCESS_KEY=`aws ssm get-parameters --names access_key --with-decryption --output text | awk '{print $4}'`
+export AWS_ACCESS_KEY_ID=`aws ssm get-parameters --names key_id --with-decryption --output text | awk '{print $4}'`
 #======================================
 # Set DB variables
 #
@@ -33,7 +28,7 @@ export DB_INST_NAME=`get_pr "DB_INST_NAME"`
 # Create APP folder & download liquibase project setting from repo and jdbc_driver
 #
 mkdir -p ~/app && cd ~/app
-aws s3 cp s3://`get_pr "S3_BUCKET"`/liquibase.tar.gz ~/app
+aws s3 cp s3://mik-bucket/liquibase.tar.gz ~/app
 tar xzf liquibase.tar.gz && cd liquibase
 mkdir -p lib && cd lib && wget https://jdbc.postgresql.org/download/postgresql-42.1.4.jar
 cd .. && cat <<EOF> liquibase.properties
@@ -53,5 +48,5 @@ mkdir -p bin && cd bin && wget https://github.com/liquibase/liquibase/releases/d
 #======================================
 # Download APP JAR file and run APP
 #
-aws s3 cp s3://$`get_pr "S3_BUCKET"`/Samsara-1.3.5.RELEASE.jar ~/app && cd ~/app 
+aws s3 cp s3://mik-bucket/Samsara-1.3.5.RELEASE.jar ~/app && cd ~/app 
 java -jar Samsara-1.3.5.RELEASE.jar &
