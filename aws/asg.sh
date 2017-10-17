@@ -38,7 +38,7 @@ echo "LB deleted ===============================>"
 aws elb create-load-balancer --load-balancer-name $(aws ssm get-parameters --names LB_NAME --with-decryption --output text | awk '{print $4}') \
 --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=9000" --subnets subnet-13828169 --security-groups sg-835e8ee9
 aws elb configure-health-check --load-balancer-name $(aws ssm get-parameters --names LB_NAME --with-decryption --output text | awk '{print $4}') \
---health-check Target=HTTP:9000/png,Interval=5,UnhealthyThreshold=5,HealthyThreshold=2,Timeout=2
+--health-check Target=HTTP:9000/login,Interval=5,UnhealthyThreshold=5,HealthyThreshold=2,Timeout=2
 echo "LB created ===============================>"
 #create ASG
 aws autoscaling create-auto-scaling-group --auto-scaling-group-name $(aws ssm get-parameters --names ASG_NAME --with-decryption --output text | awk '{print $4}') \
