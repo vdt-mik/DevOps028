@@ -28,7 +28,7 @@ pipeline {
         sh 'chmod +x aws/rds.sh && ./aws/rds.sh'
       }
     }
-    stage('Deploy RDS') {
+    stage('Deploy ASG') {
       steps {
         sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
       }
