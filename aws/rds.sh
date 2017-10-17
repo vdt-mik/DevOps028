@@ -14,7 +14,7 @@ while [[ "$count" != "0" ]]; do
 done
 
 aws rds create-db-instance --db-instance-identifier $(aws ssm get-parameters --names DB_INST_NAME --with-decryption --output text | awk '{print $4}') \
---allocated-storage 5 --db-instance-class db.t2.micro --engine postgres --db-security-groups sg-835e8ee9\
+--allocated-storage 5 --db-instance-class db.t2.micro --engine postgres --db-security-groups sg-835e8ee9 \
 --master-username $(aws ssm get-parameters --names DB_USER --with-decryption --output text | awk '{print $4}') \
 --master-user-password $(aws ssm get-parameters --names DB_PASS --with-decryption --output text | awk '{print $4}') \
 --storage-type gp2 --backup-retention-period 0 --db-name $(aws ssm get-parameters --names DB_NAME --with-decryption --output text | awk '{print $4}')
