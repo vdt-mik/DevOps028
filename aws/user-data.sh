@@ -3,8 +3,10 @@ sudo yum update -y && sudo yum install nano vim git -y
 #======================================
 # Install JDK
 #
-cd /tmp && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
-"http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm" && sudo yum localinstall jdk-8u*-linux-x64.rpm -y
+#cd /tmp && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
+#"http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm" && sudo yum localinstall jdk-8u*-linux-x64.rpm -y
+sudo yum remove java -y
+sudo yum install java-1.8.0-openjdk -y
 #======================================
 # Create user
 #
@@ -18,8 +20,8 @@ function get_pr {
 }
 
 export AWS_DEFAULT_REGION=eu-central-1
-export AWS_SECRET_ACCESS_KEY=`aws ssm get-parameters --names access_key --with-decryption --output text | awk '{print $4}'`
-export AWS_ACCESS_KEY_ID=`aws ssm get-parameters --names key_id --with-decryption --output text | awk '{print $4}'`
+export AWS_SECRET_ACCESS_KEY=`get_pr "access_key"`
+export AWS_ACCESS_KEY_ID=`get_pr "key_id"`
 #======================================
 # Set DB variables
 #
