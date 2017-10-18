@@ -1,13 +1,17 @@
 #!/bin/bash
 sudo yum update -y && sudo yum install nano vim git -y
-#sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
 #======================================
 # Install JDK
 #
 cd /tmp && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
 "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm" && sudo yum localinstall jdk-8u*-linux-x64.rpm -y
 #======================================
-# Set variables
+# Create user
+#
+sudo adduser app
+sudo su app
+#======================================
+# Set AWS variables
 #
 function get_pr {
     aws ssm get-parameters --names $1 --with-decryption --output text | awk '{print $4}'
@@ -25,6 +29,7 @@ export DB_PASS=`get_pr "DB_PASS"`
 export DB_HOST=`get_pr "DB_HOST"`
 export DB_PORT=`get_pr "DB_PORT"`
 export DB_INST_NAME=`get_pr "DB_INST_NAME"`
+#======================================
 # Create APP folder & download liquibase project setting from repo and jdbc_driver
 #
 mkdir -p ~/app && cd ~/app

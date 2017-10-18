@@ -1,18 +1,20 @@
 #!/bin/bash
 #======================================
-# Create RDS instance
+# Checking exist DB
 #
 aws rds delete-db-instance \
 --db-instance-identifier $(aws ssm get-parameters --names DB_INST_NAME --with-decryption --output text | awk '{print $4}') \
 --skip-final-snapshot 2>/dev/null
-# Wait deleted
+
 count=1
 while [[ "$count" != "0" ]]; do
         count=`aws rds describe-db-instances --db-instance-identifier $(aws ssm get-parameters --names DB_INST_NAME --with-decryption --output text | awk '{print $4}') 2>/dev/null | wc -l`
         echo "Database : deleting ... "
         sleep 5
 done
-
+#======================================
+# Create RDS instance
+#
 aws rds create-db-instance --db-instance-identifier $(aws ssm get-parameters --names DB_INST_NAME --with-decryption --output text | awk '{print $4}') \
 --allocated-storage 5 --db-instance-class db.t2.micro --engine postgres \
 --master-username $(aws ssm get-parameters --names DB_USER --with-decryption --output text | awk '{print $4}') \
