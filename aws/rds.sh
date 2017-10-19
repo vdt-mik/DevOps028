@@ -33,15 +33,15 @@ aws rds create-db-instance --db-instance-identifier `get_pr "DB_INST_NAME"` --al
 TARGET_STATUS=available
 STATUS=unknown
 while [[ "$STATUS" != "$TARGET_STATUS" ]]; do
-        STATUS=`aws rds describe-db-instances --db-instance-identifier get_pr "DB_INST_NAME" | grep DBInstanceStatus | awk '{print$2}' | cut -d'"' -f2`
+        STATUS=`aws rds describe-db-instances --db-instance-identifier $(get_pr "DB_INST_NAME") | grep DBInstanceStatus | awk '{print$2}' | cut -d'"' -f2`
         echo "Database $INSTANCE : $STATUS ... "
         sleep 15
 done
 #======================================
 # Set DB variables
 #
-EXISTING_DB_INSTANCE_INFO=aws rds describe-db-instances --db-instance-identifier get_pr "DB_INST_NAME" \
---query 'DBInstances[*].[DBInstanceIdentifier,Endpoint.Address,Endpoint.Port]' --output text
+EXISTING_DB_INSTANCE_INFO=`aws rds describe-db-instances --db-instance-identifier $(get_pr "DB_INST_NAME") \
+--query 'DBInstances[*].[DBInstanceIdentifier,Endpoint.Address,Endpoint.Port]' --output text`
 aws ssm put-parameter --name "DB_HOST" --type "String" --value "$(echo ${EXISTING_DB_INSTANCE_INFO} | awk '{print $2}')" --overwrite
 aws ssm put-parameter --name "DB_PORT" --type "String" --value "$(echo ${EXISTING_DB_INSTANCE_INFO} | awk '{print $3}')" --overwrite
 fi
