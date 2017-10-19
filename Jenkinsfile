@@ -33,6 +33,7 @@ pipeline {
       steps {
         sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
       }
+    }  
     stage('Check APP') {
       steps {
         APP_URL = sh(
