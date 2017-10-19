@@ -36,15 +36,13 @@ pipeline {
     }  
     stage('Check APP') {
       steps {
-        APP_URL = sh(
-                script: "aws ssm get-parameters --names APP_URL --with-decryption --output text",
-                returnStdout: true
-        ).trim()
-        try {
+        withEnv(['APP_URL = sh "aws ssm get-parameters --names APP_URL --with-decryption --output text']) {
+          try {
             new URL("$APP_UPR/login").getText()
             return true
-        } catch (Exception e) {
+          } catch (Exception e) {
             return false
+          }  
         }
       } 
     }
