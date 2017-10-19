@@ -34,11 +34,11 @@ pipeline {
         sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
       }
       post {
-        try {
-            APP_URL = sh(
-                script: "`aws elb describe-load-balancers --load-balancer-names $(aws ssm get-parameters --names LB_NAME --with-decryption --output text | awk '{print $4}') | grep DNSName | awk '{print $2}' | cut -d'"' -f2`",         
+        APP_URL = sh(
+                script: "aws elb describe-load-balancers --load-balancer-names \$(aws ssm get-parameters --names LB_NAME --with-decryption --output text | awk '{print \$4}') | grep DNSName | awk '{print \$2}' | cut -d'"' -f2",         
                 returnStdout: true
             ).trim()
+        try {
             new URL("$APP_UPR/login").getText()
             return true
         } catch (Exception e) {
