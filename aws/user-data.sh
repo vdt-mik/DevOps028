@@ -57,4 +57,4 @@ mkdir -p bin && cd bin && wget https://github.com/liquibase/liquibase/releases/d
 #
 aws s3 cp s3://mik-bucket/Samsara-1.3.5.RELEASE.jar ~/app && cd ~/app 
 java -jar Samsara-1.3.5.RELEASE.jar &
-#!!
+#!
