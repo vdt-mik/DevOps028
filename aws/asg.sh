@@ -70,9 +70,12 @@ then
 NEW_SIZE=`get_pr "ASG_MAX_SIZE"`*2
 echo "$NEW_SIZE"
 echo "ASG up!"
-echo "Create new instanse"
+echo "Create new instances"
 aws autoscaling update-auto-scaling-group --auto-scaling-group-name `get_pr "ASG_NAME"` \
 --termination-policies "OldestInstance" --max-size ${NEW_SIZE} --desired-capacity ${NEW_SIZE} 
+sleep 120
+echo "Kick old instances"
+aws autoscaling update-auto-scaling-group --auto-scaling-group-name `get_pr "ASG_NAME"` --max-size `get_pr "ASG_MAX_SIZE"` --desired-capacity `get_pr "ASG_MAX_SIZE"`
 else
 echo "ASG down!!!"
 echo "Starting create"
