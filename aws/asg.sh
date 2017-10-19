@@ -42,6 +42,7 @@ echo "Starting create LC"
 aws autoscaling create-launch-configuration --launch-configuration-name `get_pr "LC_NAME"` --key-name ec2-key --image-id ami-c7ee5ca8 \
 --security-groups samsara-sg --instance-type t2.micro --user-data file://aws/user-data.sh --instance-monitoring Enabled=true --iam-instance-profile EC2
 echo "LC created ===============================>"
+fi
 #======================================
 # Delete LB
 #
@@ -70,6 +71,7 @@ aws elb create-load-balancer --load-balancer-name `get_pr "LB_NAME"` \
 aws elb configure-health-check --load-balancer-name `get_pr "LB_NAME"` \
 --health-check Target=HTTP:9000/login,Interval=5,UnhealthyThreshold=5,HealthyThreshold=2,Timeout=2
 echo "LB created ===============================>"
+fi
 #======================================
 # Create ASG
 #
