@@ -70,6 +70,8 @@ aws elb create-load-balancer --load-balancer-name `get_pr "LB_NAME"` \
 --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=9000" --subnets subnet-13828169 --security-groups sg-835e8ee9
 aws elb configure-health-check --load-balancer-name `get_pr "LB_NAME"` \
 --health-check Target=HTTP:9000/login,Interval=5,UnhealthyThreshold=5,HealthyThreshold=2,Timeout=2
+aws ssm put-parameter --name "APP_URL" --type "String" --value "$(aws elb describe-load-balancers --load-balancer-names \
+`get_pr "LB_NAME"` | grep DNSName | awk '{print $2}' | cut -d'"' -f2)" --overwrite
 echo "LB created ===============================>"
 fi
 #======================================
