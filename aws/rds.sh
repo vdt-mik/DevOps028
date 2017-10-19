@@ -18,7 +18,8 @@
 function get_pr {
     aws ssm get-parameters --names $1 --with-decryption --output text | awk '{print $4}'
 }
-if [[ "aws rds describe-db-instances --db-instance-identifier `get_pr "DB_INST_NAME"` 2>/dev/null | wc -l" != "0" ]]
+desc_rds
+if [[ "`aws rds describe-db-instances --db-instance-identifier get_pr "DB_INST_NAME" 2>/dev/null | wc -l`" != "0" ]]
 then
 echo "RDS up!"
 else
