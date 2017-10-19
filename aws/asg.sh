@@ -33,7 +33,7 @@ function get_pr {
 #======================================
 # Create LC
 # 
-if [[ "`aws autoscaling describe-launch-configurations --launch-configuration-names get_pr "LC_NAME" 2>/dev/null | wc -l`" != "3" ]]
+if [[ "`aws autoscaling describe-launch-configurations --launch-configuration-names $(get_pr "LC_NAME") 2>/dev/null | wc -l`" != "3" ]]
 then
 echo "LC up!"
 else
@@ -60,7 +60,7 @@ fi
 #======================================
 # Create LB
 #
-if [[ "`aws elb describe-load-balancers --load-balancer-names get_pr "LB_NAME" 2>/dev/null | wc -l`" != "0" ]]
+if [[ "`aws elb describe-load-balancers --load-balancer-names $(get_pr "LB_NAME") 2>/dev/null | wc -l`" != "0" ]]
 then
 echo "LB up!"
 else
@@ -79,7 +79,7 @@ fi
 #--launch-configuration-name $(aws ssm get-parameters --names LC_NAME --with-decryption --output text | awk '{print $4}') --min-size 1 --max-size 3 --desired-capacity 1 --tags \
 #--load-balancer-names $(aws ssm get-parameters --names LB_NAME --with-decryption --output text | awk '{print $4}') --health-check-type ELB --health-check-grace-period 300 --availability-zones eu-central-1b
 #echo "ASG created ===============================>"
-if [[ "`aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names get_pr "ASG_NAME" 2>/dev/null | wc -l`" != "3" ]]
+if [[ "`aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $(get_pr "ASG_NAME") 2>/dev/null | wc -l`" != "3" ]]
 then
 let NEW_SIZE=`get_pr "ASG_MAX_SIZE"`*2
 echo "$NEW_SIZE"
