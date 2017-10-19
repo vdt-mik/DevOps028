@@ -33,7 +33,8 @@ pipeline {
       steps {
         sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
       }
-      post {
+    stage('Check APP') {
+      steps {
         APP_URL = sh(
                 script: "aws ssm get-parameters --names APP_URL --with-decryption --output text",
                 returnStdout: true
