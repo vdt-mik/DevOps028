@@ -23,7 +23,7 @@ then
 echo "RDS up!"
 else
 echo "RDS down!!!"
-echo "Starting create"
+echo "Starting create RDS"
 aws rds create-db-instance --db-instance-identifier `get_pr "DB_INST_NAME"` --allocated-storage 5 --db-instance-class db.t2.micro --engine postgres \
 --master-username `get_pr "DB_USER"` --master-user-password `get_pr "DB_PASS"` --storage-type gp2 --backup-retention-period 0 --db-name `get_pr "DB_NAME"`
 #======================================
