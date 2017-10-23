@@ -89,7 +89,7 @@ echo "ASG up!"
 echo "Create new instances"
 aws autoscaling update-auto-scaling-group --auto-scaling-group-name `get_pr "ASG_NAME"` \
 --termination-policies "OldestInstance" --max-size ${NEW_SIZE} --desired-capacity ${NEW_SIZE} 
-sleep 30
+sleep 120
 echo "Kick old instances"
 aws autoscaling update-auto-scaling-group --auto-scaling-group-name `get_pr "ASG_NAME"` --max-size `get_pr "ASG_MAX_SIZE"` --desired-capacity `get_pr "ASG_MAX_SIZE"`
 else
@@ -99,5 +99,5 @@ aws autoscaling create-auto-scaling-group --auto-scaling-group-name `get_pr "ASG
 --launch-configuration-name `get_pr "LC_NAME"` --min-size 1 --max-size `get_pr "ASG_MAX_SIZE"` --desired-capacity 1 \
 --load-balancer-names `get_pr "LB_NAME"` --health-check-type ELB --health-check-grace-period 300 --availability-zones eu-central-1b
 echo "ASG created ===============================>"
-sleep 60
+sleep 120
 fi
