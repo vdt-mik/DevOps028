@@ -36,12 +36,21 @@ node ('Slave'){
     sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
   }  
   stage('Check APP') {
-    APP_URI = sh(
-    script: "aws ssm get-parameters --names APP_URL --with-decryption --output text | awk '{print \$4}'",
-    returnStdout: true
-    ).trim()
-    def response = httpRequest "http://$APP_URI/login" 
-    println("Status: "+response.status) 
-    println("Content: "+response.content) 
+    timeout(time: 1, unit: 'MINUTES') {
+      waitUntil {
+        try {
+          APP_URI = sh(
+          script: "aws ssm get-parameters --names APP_URL --with-decryption --output text | awk '{print \$4}'",
+          returnStdout: true
+          ).trim()
+          def response = httpRequest "http://$APP_URI/login" 
+          println("Status: "+response.status) 
+          println("Content: "+response.content)
+          return true
+        } catch (Exception e) {
+            return false
+          }
+      }
+    }     
   } 
 }
