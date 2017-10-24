@@ -2,12 +2,13 @@ node ('Slave'){
   String jdktool = tool name: "jdk8", type: 'hudson.model.JDK'
   def mvnHome = tool name: 'maven'
   List javaEnv = [
-        "PATH+MVN=${jdktool}/bin:${mvnHome}/bin",
-        "M2_HOME=${mvnHome}",
-        "JAVA_HOME=${jdktool}"
-    ]
+    "PATH+MVN=${jdktool}/bin:${mvnHome}/bin",
+    "M2_HOME=${mvnHome}",
+    "JAVA_HOME=${jdktool}"
+  ]
   withEnv(javaEnv) {
-    stage('Checkout') {
+    stage('Clear & Checkout') {
+      cleanWs()
       git url: 'https://github.com/vdt-mik/DevOps028'
     }
     stage('Test & Build') {
@@ -27,12 +28,12 @@ node ('Slave'){
         sh 'aws s3 cp aws/user-data.sh s3://mik-bucket/'
       }
     }
-  }              
+  }           
   stage('Deploy RDS') {
-      sh 'chmod +x aws/rds.sh && ./aws/rds.sh'
+    sh 'chmod +x aws/rds.sh && ./aws/rds.sh'
   }
   stage('Deploy ASG') {
-      sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
+    sh 'chmod +x aws/asg.sh && ./aws/asg.sh'
   }  
   stage('Check APP') {
     APP_URI = sh(
